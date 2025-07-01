@@ -15,7 +15,7 @@ private:
         T value;
         Node * next;
     };
-    
+public:
     class forward_iterator{
     friend class Forward_list<T>;
     public:
@@ -190,6 +190,8 @@ public:
         if (pos.node == nullptr) {
             throw std::invalid_argument("Cannot insert after end()");
         }
+        
+        
         Node * new_node = create_new_node(value);
         Node * next = pos.node->next;
         pos.node->next = new_node;
@@ -412,23 +414,88 @@ public:
             return;
         }
         
-        Node * fake_head = new Node(0, head);
-        Node * current = fake_head;
+        while (head != nullptr && head->value == value) {
+            pop_front();
+        }
         
-        
+        Node * current = head;
+
         while (current != nullptr && current->next != nullptr) {
-            if(current->next->value == value){
-                std::cout << head->value << std::endl;
+            if (current->next->value == value) {
                 erase_after(forward_iterator(current));
-                std::cout << head->value << std::endl;
-                display();
-            }else{
+            } else {
                 current = current->next;
-                std::cout << current->next << std::endl;
+            }
+        }
+    }
+    
+    template< class UnaryPred>
+    void remove_if(UnaryPred p ){
+        if(head == nullptr){
+            return;
+        }
+        while (head != nullptr && p(head->value)) {
+            pop_front();
+        }
+        
+        Node * current = head;
+
+        while (current != nullptr && current->next != nullptr) {
+            if (p(current->next->value)) {
+                erase_after(forward_iterator(current));
+            } else {
+                current = current->next;
             }
         }
     }
 
+
+    void unique(){
+        if(head == nullptr){
+            return;
+        }
+        Node * current = head;
+
+        while (current != nullptr && current->next != nullptr) {
+            if (current->value == current->next->value) {
+                erase_after(forward_iterator(current));
+            }else{
+                current = current->next;
+            }
+        }
+    }
+    
+    template< class BinaryPred >
+    void unique( BinaryPred p ){
+        if(head == nullptr){
+            return;
+        }
+        Node * current = head;
+
+        while (current != nullptr && current->next != nullptr) {
+            if (p(current->value, current->next->value)) {
+                erase_after(forward_iterator(current));
+            }else{
+                current = current->next;
+            }
+        }
+    }
+    
+    void reverse() noexcept{
+        if (head == nullptr) {
+            return;
+        }
+        
+        Node * new_head = nullptr;
+        
+        while (head != nullptr) {
+            Node * next = head->next;
+            head->next = new_head;
+            new_head = head;
+            head = next;
+        }
+        head = new_head;
+    }
 
     
     
@@ -441,6 +508,7 @@ public:
     forward_iterator end() noexcept{
         return forward_iterator(nullptr);
     }
+    
     
     
 // Modifiers
@@ -518,9 +586,9 @@ private:
     }
     
 
+
 private:
     Node * head;
-    
     
 };
 

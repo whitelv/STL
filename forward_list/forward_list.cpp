@@ -47,14 +47,9 @@ int main(){
     
     std::vector p {1,2,3,45,6,788,90,9,9};
     
-    Forward_list<int> f2 {7,5,7,7,7};
+    Forward_list<int> f2 {1,7,2,2,2,3,3,4,4};
     
-    
-    
-
-
-    f2.remove(7);
-    
+        
     f2.display();
 
     return 0;

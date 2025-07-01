@@ -1,0 +1,3 @@
+/Users/lubomirvitvickij/Desktop/STL/STL/STL/forward_list/build/CMakeFiles/my_program.dir
+/Users/lubomirvitvickij/Desktop/STL/STL/STL/forward_list/build/CMakeFiles/edit_cache.dir
+/Users/lubomirvitvickij/Desktop/STL/STL/STL/forward_list/build/CMakeFiles/rebuild_cache.dir

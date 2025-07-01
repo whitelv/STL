@@ -1,0 +1,8 @@
+[
+{
+  "directory": "/Users/lubomirvitvickij/Desktop/STL/STL/STL/forward_list/build",
+  "command": "/usr/bin/clang++   -g -std=gnu++17 -arch arm64 -o CMakeFiles/my_program.dir/forward_list.cpp.o -c /Users/lubomirvitvickij/Desktop/STL/STL/STL/forward_list/forward_list.cpp",
+  "file": "/Users/lubomirvitvickij/Desktop/STL/STL/STL/forward_list/forward_list.cpp",
+  "output": "CMakeFiles/my_program.dir/forward_list.cpp.o"
+}
+]

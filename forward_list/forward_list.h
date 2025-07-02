@@ -173,11 +173,11 @@ public:
 // Element access
 public:
     T & front(){
-        return head;
+        return head->value;
     }
     
     const T & front() const{
-        return head;
+        return head->value;
     }
     
 //Capacity

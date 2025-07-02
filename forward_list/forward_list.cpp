@@ -49,6 +49,7 @@ int main(){
     
     Forward_list<int> f2 {1,7,2,2,2,3,3,4,4};
     
+    std::cout << f2.front() << std::endl;
         
     f2.display();
 

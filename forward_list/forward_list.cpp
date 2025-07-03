@@ -49,6 +49,8 @@ int main(){
     
     Forward_list<int> f2 {1,7,2,2,2,3,3,4,4};
     
+    f2.insert_after(f2.begin(), 3);
+    
     std::cout << f2.front() << std::endl;
         
     f2.display();

@@ -198,7 +198,7 @@ public:
         tail->next = sentinel_m;
     }
 
-    template <typename InputIt>
+    template <class InputIt>
     List(InputIt first, InputIt last)
     {
         sentinel_m = create_new_sentiel();
@@ -292,29 +292,25 @@ public:
         tail->next = sentinel_m;
     }
 
-    
-    ~List(){
+    ~List()
+    {
         clear();
         delete sentinel_m;
     }
 
-
-
-    void clear(){
-        Node * current = sentinel_m->next;
+    void clear()
+    {
+        Node *current = sentinel_m->next;
         while (current != sentinel_m)
         {
-            Node * next = current->next;
+            Node *next = current->next;
             delete current;
             current = next;
         }
         sentinel_m->next = sentinel_m;
         sentinel_m->prev = sentinel_m;
-        size_m = 0;      
+        size_m = 0;
     }
-
-
-
 
     // *iterators
 

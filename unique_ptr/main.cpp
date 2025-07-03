@@ -4,13 +4,36 @@
 
 int main()
 {
-    int * a = new int(9);
-    std::unique_ptr<int> ptr1(nullptr);
-    ptr1.reset(new int(8));
-    std::cout << "a: " << *a << std::endl;
-    
-    int * b = new int(8);
-    int o = 8;
-    Unique_ptr<int> u = Make_unique<int>(o);
-    std::cout << *u << std::endl;
+    {
+        int * ptr0 = new int[10];
+        ptr0[0] = 9;
+        std::unique_ptr<int[]> ptr1(ptr0);
+        ptr1.reset();
+
+        int * ptr = new int[10];
+        for (size_t i = 0; i < 10; i++)
+        {
+            ptr[i] = i;
+        }
+        Unique_ptr<int> p = make_unique<int>(7);
+        // Unique_ptr<int[]> ptr2 = make_unique<int[]>(20);
+
+        // for (size_t i = 0; i < 20; i++)
+        // {
+        //     ptr2[i] = i * 2;
+        // }
+
+        // for (size_t i = 0; i < 20; i++)
+        // {
+        //     std::cout << ptr2[i] << std::endl;
+        // }
+        // std::cout << std::endl;
+        
+        
+
+
+        
+    }
+
+    return 0;
 }

@@ -88,9 +88,10 @@ private:
 };
 
 // ** Non-member functions
-template< class T, class... Args >
-constexpr Unique_ptr<T> make_unique( Args&&... args ){
-    return  Unique_ptr<T>(new T(std::forward<Args>(args)...));
+template <class T, class... Args>
+constexpr Unique_ptr<T> make_unique(Args &&...args)
+{
+    return Unique_ptr<T>(new T(std::forward<Args>(args)...));
 }
 
 #endif

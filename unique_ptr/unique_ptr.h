@@ -89,6 +89,7 @@ private:
 
 // ** Non-member functions
 template <class T, class... Args>
+requires (!std::is_array_v<T>)
 Unique_ptr<T> make_unique(Args &&...args)
 {
     return Unique_ptr<T>(new T(std::forward<Args>(args)...));
@@ -172,9 +173,11 @@ private:
 
 // ** Non-member functions
 template <class T>
-Unique_ptr<T[]> make_unique_arr(std::size_t size)
+requires (std::is_array_v<T>)
+Unique_ptr<T> make_unique(std::size_t size)
 {
-    return Unique_ptr<T[]>(new T[size]{});
+    using Element = std::remove_extent_t<T>;
+    return Unique_ptr<T>(new Element[size]{});
 }
 
 #endif

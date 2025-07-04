@@ -16,18 +16,18 @@ int main()
             ptr[i] = i;
         }
         Unique_ptr<int> p = make_unique<int>(7);
-        // Unique_ptr<int[]> ptr2 = make_unique<int[]>(20);
+        Unique_ptr<int[]> ptr2 = make_unique<int[]>(20);
 
-        // for (size_t i = 0; i < 20; i++)
-        // {
-        //     ptr2[i] = i * 2;
-        // }
+        for (size_t i = 0; i < 20; i++)
+        {
+            ptr2[i] = i * 2;
+        }
 
-        // for (size_t i = 0; i < 20; i++)
-        // {
-        //     std::cout << ptr2[i] << std::endl;
-        // }
-        // std::cout << std::endl;
+        for (size_t i = 0; i < 20; i++)
+        {
+            std::cout << ptr2[i] << std::endl;
+        }
+        std::cout << std::endl;
         
         
 

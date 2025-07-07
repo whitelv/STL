@@ -191,13 +191,13 @@ public:
 
     // ** Capacity
 public:
-    size_t size() { return size_m; };
-    size_t capacity() { return map_capacity; };
-
+    size_t size() const { return size_m; };
+    bool empty() const { return size_m == 0; }
+    size_t capacity() const { return map_capacity; };
 
     // ** Constructor & Destructor
 public:
-    Deque() : map{allocate_map(map_size)}, size_m{0}, map_capacity{map_size}, array_counter{0}{}
+    Deque() : map{allocate_map(map_size)}, size_m{0}, map_capacity{map_size}, array_counter{0} {}
 
     ~Deque()
     {

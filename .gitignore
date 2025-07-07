@@ -6,3 +6,7 @@ unique_ptr/build/
 shared_ptr/build/
 
 deque/build/
+
+stack/.vscode/
+
+stack/build/

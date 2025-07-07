@@ -1,3 +1,6 @@
+#ifndef SHARED_PTR_H
+#define SHARED_PTR_H
+
 #include <cstddef>
 #include <utility>
 
@@ -127,3 +130,5 @@ bool operator==(const Shared_ptr<T> &lhs, const Shared_ptr<U> &rhs) noexcept
 {
     return lhs.get() == rhs.get();
 }
+
+#endif

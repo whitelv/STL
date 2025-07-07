@@ -4,3 +4,5 @@ list/build/
 unique_ptr/build/
 
 shared_ptr/build/
+
+deque/build/

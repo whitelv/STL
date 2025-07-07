@@ -28,4 +28,5 @@ int main()
 
     std::cout << "IS EMPTY: " << s.empty() << std::endl;
 
+    return 0;
 }

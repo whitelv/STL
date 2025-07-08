@@ -11,9 +11,8 @@
 int main(){
 
     Deque<int> d;
-
     
-    
+ 
 
     return 0;
 }

@@ -28,7 +28,19 @@ public:
     // ** Constructor & Destructor
 public:
     Queue() {}
+    Queue( const Queue& other ) : q{other.q} {}
+    Queue(Queue&& other ) : q{std::move(other.q)} {}
     ~Queue() {}
+
+    Queue& operator=( const Queue& other ){
+        q = other.q;
+        return *this;
+    }
+
+    Queue& operator=( Queue&& other ){
+        q = std::move(other.q);
+        return *this;
+    }
 
 public:
     Deque<T> q;

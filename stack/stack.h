@@ -24,7 +24,19 @@ public:
     // ** Constructor & Destructor
 public:
     Stack() {};
+    Stack(const Stack &other) : stack{other.stack} {}
+    Stack(Stack &&other) : stack{std::move(other.stack)} {}
     ~Stack() {};
+
+    Stack &operator=(const Stack &other) { 
+        stack = other.stack; 
+        return *this;
+    }
+
+    Stack& operator=( Stack&& other ){
+        stack = std::move(other.stack); 
+        return *this;
+    }
 
 public:
     Deque<T> stack;

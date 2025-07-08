@@ -8,25 +8,22 @@ int main()
     {
         s.push(i);
     }
-    for (size_t i = 0; i < 10; i++)
-    {
-        std::cout << s.top() << " ";
-        s.pop();
-    }
+
+    Stack<int> s1;
+    s1 = std::move(s);
+
+
+    
+    s1.push(100);
+
+    s.push(90);
+
+    s.stack.display();
+
     std::cout << std::endl;
+    s1.stack.display();
 
-    for (size_t i = 0; i < 10; i++)
-    {
-        s.push(i);
-    }
-    for (size_t i = 0; i < 10; i++)
-    {
-        std::cout << s.top() << " ";
-        s.pop();
-    }
-    std::cout << std::endl;
 
-    std::cout << "IS EMPTY: " << s.empty() << std::endl;
-
+    
     return 0;
 }

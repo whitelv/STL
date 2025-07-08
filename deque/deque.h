@@ -7,10 +7,13 @@
 #include <cmath>
 #include <memory>
 #include <exception>
+#include <initializer_list>
 
 template <class T>
 class Deque
 {
+
+public:
 
     //**Modifiers
 public:
@@ -25,6 +28,9 @@ public:
 
         map = allocate_map(map_size);
         size_m = 0;
+        map_offset = 0;
+        array_offset = 0;
+        array_counter = 0;
         map_capacity = map_size;
     }
 
@@ -178,13 +184,26 @@ public:
 
     T &operator[](size_t index)
     {
-        double number = double(index) / array_size + array_offset / double(array_size);
 
-        double intPart;
-        double fracPart = std::modf(number, &intPart);
+        size_t number = index + array_offset;
+        size_t intPart = number / array_size;
+        double fracPart = (number % array_size);
 
         size_t map_index = map_offset + intPart;
-        size_t arr_index = fracPart * array_size;
+        size_t arr_index = fracPart;
+
+        return map[map_index][arr_index];
+    }
+
+    const T &operator[](size_t index) const
+    {
+
+        size_t number = index + array_offset;
+        size_t intPart = number / array_size;
+        double fracPart = (number % array_size);
+
+        size_t map_index = map_offset + intPart;
+        size_t arr_index = fracPart;
 
         return map[map_index][arr_index];
     }
@@ -193,11 +212,44 @@ public:
 public:
     size_t size() const { return size_m; };
     bool empty() const { return size_m == 0; }
-    size_t capacity() const { return map_capacity; };
+    size_t capacity() const { return array_size * array_counter; };
 
     // ** Constructor & Destructor
 public:
     Deque() : map{allocate_map(map_size)}, size_m{0}, map_capacity{map_size}, array_counter{0} {}
+    Deque(std::initializer_list<T> ilist) : map{allocate_map(map_size)}, size_m{0}, map_capacity{map_size}, array_counter{0}
+    {
+        if (ilist.size() == 0)
+        {
+            return;
+        }
+        first_array();
+
+        auto it = ilist.begin();
+        while (it != ilist.end())
+        {
+            push_front(*it++);
+        }
+    }
+
+    Deque(const Deque &other) : map_capacity{other.map_capacity}, map_offset{other.map_offset}, array_offset{other.array_offset},
+                                array_counter{other.array_counter}, size_m{other.size_m}
+    {
+
+        map = allocate_map(map_capacity);
+        copy_from_deque(other);
+    }
+
+    Deque(Deque &&other) : map{other.map}, size_m{other.size_m}, map_offset{other.map_offset}, array_offset{other.array_offset},
+                           array_counter{other.array_counter}, map_capacity{other.map_capacity}
+    {
+        other.map = allocate_map(map_size);
+        other.size_m = 0;
+        other.array_counter = 0;
+        other.map_offset = 0;
+        other.array_offset = 0;
+        other.map_capacity = map_size;
+    }
 
     ~Deque()
     {
@@ -206,6 +258,52 @@ public:
             free(map[map_offset + i]);
         }
         free(map);
+    }
+
+    // * Assignment operator
+    Deque &operator=(const Deque &other)
+    {
+        std::cout << "aa" << std::endl;
+        if (this == &other)
+        {
+            return *this;
+        }
+        std::destroy_at<Deque<T>>(this);
+        map_capacity = other.map_capacity;
+        map_offset = other.map_offset;
+        array_offset = other.array_offset;
+        array_counter = other.array_counter;
+        size_m = other.size_m;
+
+        map = allocate_map(map_capacity);
+
+        copy_from_deque(other);
+
+        return *this;
+    }
+
+    Deque &operator=(Deque &&other)
+    {
+        if (this == &other)
+        {
+            return *this;
+        }
+        std::destroy_at<Deque<T>>(this);
+        map = other.map;
+        size_m = other.size_m;
+        map_offset = other.map_offset;
+        array_offset = other.array_offset;
+        array_counter = other.array_counter;
+        map_capacity = other.map_capacity;
+
+        other.map = allocate_map(map_size);
+        other.size_m = 0;
+        other.array_counter = 0;
+        other.map_offset = 0;
+        other.array_offset = 0;
+        other.map_capacity = map_size;
+
+        return *this;
     }
 
     // ** Helper functions
@@ -255,6 +353,19 @@ private:
         map_offset = new_map_offset;
     }
 
+    void copy_from_deque(const Deque &other)
+    {
+        for (size_t i = 0; i < array_counter; i++)
+        {
+            map[map_offset + i] = allocate_array();
+        }
+
+        for (size_t i = 0; i < size_m; i++)
+        {
+            operator[](i) = other[i];
+        }
+    }
+
     void first_array()
     {
         map_offset = map_capacity / 2;
@@ -279,7 +390,7 @@ private:
         }
     }
 
-private:
+public:
     T **map;
     size_t size_m;
     size_t map_offset;

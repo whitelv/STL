@@ -12,3 +12,5 @@ stack/.vscode/
 stack/build/
 
 queue/build/
+
+Smart_pointers/build/

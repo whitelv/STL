@@ -7,7 +7,7 @@
 template <typename T>
 class BST
 {
-public:
+private:
     struct Node
     {
         size_t key;
@@ -53,7 +53,7 @@ public:
     }
 
     // ** Helper functions
-public:
+private:
     Node *create_new_node(size_t key, const T &value)
     {
         return new Node{key, value, nullptr, nullptr};
@@ -122,37 +122,38 @@ public:
         {
             node->right = erase(node->right, key);
         }
-        else (key == node->key)
-        {
-            if (node->left == nullptr && node->right == nullptr)
+        else
+            (key == node->key)
             {
-                delete node;
-                return nullptr;
+                if (node->left == nullptr && node->right == nullptr)
+                {
+                    delete node;
+                    return nullptr;
+                }
+                else if (node->left != nullptr && node->right == nullptr)
+                {
+                    Node *new_left = node->left;
+                    delete node;
+                    return new_left;
+                }
+                else if (node->right != nullptr && node->left == nullptr)
+                {
+                    Node *new_right = node->right;
+                    delete node;
+                    return new_right;
+                }
+                else
+                {
+                    Node *successor = find_min(node->right);
+                    size_t temp_key = successor->key;
+                    T temp_value = successor->value;
+                    successor->key = node->key;
+                    successor->value = node->value;
+                    node->key = temp_key;
+                    node->value = temp_value;
+                    node->right = erase(node->right, key);
+                }
             }
-            else if (node->left != nullptr && node->right == nullptr)
-            {
-                Node *new_left = node->left;
-                delete node;
-                return new_left;
-            }
-            else if (node->right != nullptr && node->left == nullptr)
-            {
-                Node *new_right = node->right;
-                delete node;
-                return new_right;
-            }
-            else (node->left != nullptr && node->right != nullptr)
-            {
-                Node *successor = find_min(node->right);
-                size_t temp_key = successor->key;
-                T temp_value = successor->value;
-                successor->key = node->key;
-                successor->value = node->value;
-                node->key = temp_key;
-                node->value = temp_value;
-                node->right = erase(node->right, key);
-            }
-        }
         return node;
     }
 
@@ -176,7 +177,7 @@ public:
         delete node;
     }
 
-public:
+private:
     Node *root;
 };
 

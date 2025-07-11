@@ -4,6 +4,7 @@
 #include <cstddef>
 #include <iostream>
 #include <queue>
+#include <functional>
 
 template <typename T>
 class BST
@@ -48,6 +49,10 @@ public:
             {
                 parent = parent->left;
             }
+            else
+            {
+                throw std::invalid_argument("ERROR: KEY MUST BE UNIQUE");
+            }
         }
     }
 
@@ -74,12 +79,11 @@ public:
         {
             Node *target = target_parent->left;
             target_parent->left = erase_node(target);
+            return;
         }
-        else if (target_parent->right->key == key)
-        {
-            Node *target = target_parent->right;
-            target_parent->right = erase_node(target);
-        }
+
+        Node *target = target_parent->right;
+        target_parent->right = erase_node(target);
     }
 
     // * clear
@@ -205,25 +209,23 @@ private:
             delete target;
             return new_target;
         }
+
+        Node *successor = find_min(target->right);
+        Node *successor_parent = find_parent(target, successor->key);
+
+        if (successor_parent->left == successor)
+            successor_parent->left = nullptr;
         else
-        {
-            Node *successor = find_min(target->right);
-            Node *successor_parent = find_parent(target, successor->key);
+            successor_parent->right = nullptr;
 
-            if (successor_parent->left == successor)
-                successor_parent->left = nullptr;
-            else
-                successor_parent->right = nullptr;
-
-            successor->left = target->left;
-            successor->right = target->right;
-            delete target;
-            return successor;
-        }
+        successor->left = target->left;
+        successor->right = target->right;
+        delete target;
+        return successor;
     }
 
     // * DFS
-    void DFS(void (*func)(Node *))
+    void DFS(std::function<void(Node *)> func)
     {
         if (root == nullptr)
             return;
@@ -232,14 +234,15 @@ private:
         visited.push(root);
         while (!visited.empty())
         {
-            func(visited.front());
-            if (visited.front()->left != nullptr)
+            Node * front = visited.front();
+            func(front);
+            if (front->left != nullptr)
             {
-                visited.push(visited.front()->left);
+                visited.push(front->left);
             }
-            if (visited.front()->right != nullptr)
+            if (front->right != nullptr)
             {
-                visited.push(visited.front()->right);
+                visited.push(front->right);
             }
             visited.pop();
         }

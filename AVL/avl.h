@@ -202,10 +202,8 @@ private:
             int right_child_bf = balance_factor(node->right);
             if (right_child_bf > 0)
             {
-                std::cout << "rl rotation" << std::endl;
                 return right_left_rotation(node);
             }
-            std::cout << "ll rotation" << std::endl;
             return left_rotation(node);
         }
 
@@ -214,10 +212,8 @@ private:
             int left_child_bf = balance_factor(node->left);
             if (left_child_bf < 0)
             {
-                std::cout << "lr rotation" << std::endl;
                 return left_right_rotation(node);
             }
-            std::cout << "rr rotation" << std::endl;
             return right_rotation(node);
         }
 

@@ -12,6 +12,7 @@ private:
     {
         size_t key;
         T value;
+        size_t height;
         Node *left;
         Node *right;
     };
@@ -54,11 +55,13 @@ public:
 
     // ** Helper functions
 private:
+    // # create node
     Node *create_new_node(size_t key, const T &value)
     {
-        return new Node{key, value, nullptr, nullptr};
+        return new Node{key, value, 1, nullptr, nullptr};
     }
 
+    // # insert node
     Node *insert(size_t key, const T &value, Node *node)
     {
         if (node == nullptr)
@@ -75,9 +78,21 @@ private:
         {
             node->right = insert(key, value, node->right);
         }
+
+        update_height(node);
+
         return node;
     }
 
+    // # height functions
+    void update_height(Node *node)
+    {
+        size_t lheight = node->left ? node->left->height : 0;
+        size_t rheight = node->right ? node->right->height : 0;
+        node->height = std::max(lheight, rheight) + 1;
+    }
+
+    // # display
     void display(Node *node) const
     {
         if (node == nullptr)
@@ -85,10 +100,11 @@ private:
             return;
         }
         display(node->left);
-        std::cout << "[ " << node->key << " : " << node->value << " ], ";
+        std::cout << "[ " << node->key << " : " << node->value << " : " << node->height << " ], ";
         display(node->right);
     }
 
+    // # find
     Node *find(Node *node, size_t key)
     {
         if (node == nullptr)
@@ -107,13 +123,13 @@ private:
         return node;
     }
 
+    // # erase
     Node *erase(Node *node, size_t key)
     {
         if (node == nullptr)
         {
             return node;
         }
-
         if (key < node->key)
         {
             node->left = erase(node->left, key);
@@ -123,40 +139,37 @@ private:
             node->right = erase(node->right, key);
         }
         else
-            (key == node->key)
+        {
+            if (node->left == nullptr && node->right == nullptr)
             {
-                if (node->left == nullptr && node->right == nullptr)
-                {
-                    delete node;
-                    return nullptr;
-                }
-                else if (node->left != nullptr && node->right == nullptr)
-                {
-                    Node *new_left = node->left;
-                    delete node;
-                    return new_left;
-                }
-                else if (node->right != nullptr && node->left == nullptr)
-                {
-                    Node *new_right = node->right;
-                    delete node;
-                    return new_right;
-                }
-                else
-                {
-                    Node *successor = find_min(node->right);
-                    size_t temp_key = successor->key;
-                    T temp_value = successor->value;
-                    successor->key = node->key;
-                    successor->value = node->value;
-                    node->key = temp_key;
-                    node->value = temp_value;
-                    node->right = erase(node->right, key);
-                }
+                delete node;
+                return nullptr;
             }
+            else if (node->left != nullptr && node->right == nullptr)
+            {
+                Node *new_left = node->left;
+                delete node;
+                return new_left;
+            }
+            else if (node->right != nullptr && node->left == nullptr)
+            {
+                Node *new_right = node->right;
+                delete node;
+                return new_right;
+            }
+
+            Node *successor = find_max(node->left);
+            node->key = successor->key;
+            node->value = successor->value;
+            node->left = erase(node->left, successor->key);
+        }
+
+        update_height(node);
+
         return node;
     }
 
+    // # min
     Node *find_min(Node *node)
     {
         while (node->left != nullptr)
@@ -166,6 +179,17 @@ private:
         return node;
     }
 
+    // # max
+    Node *find_max(Node *node)
+    {
+        while (node->right != nullptr)
+        {
+            node = node->right;
+        }
+        return node;
+    }
+
+    // #clear
     void clear(Node *node)
     {
         if (node == nullptr)

@@ -191,7 +191,6 @@ private:
     // * erase node
     Node *erase_node(Node *target)
     {
-
         if (target->left == nullptr && target->right == nullptr)
         {
             delete target;

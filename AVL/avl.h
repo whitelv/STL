@@ -305,7 +305,6 @@ private:
         }
         return node;
     }
-
     // #clear
     void clear(Node *node)
     {

@@ -41,19 +41,6 @@ int main(){
     
     std::cout << "------Custom class:------" << std::endl;
     
-    
-    
-    Forward_list<int> f1 {4,1,24};
-    
-    std::vector p {1,2,3,45,6,788,90,9,9};
-    
-    Forward_list<int> f2 {1,7,2,2,2,3,3,4,4};
-    
-    f2.insert_after(f2.begin(), 3);
-    
-    std::cout << f2.front() << std::endl;
-        
-    f2.display();
 
     return 0;
     

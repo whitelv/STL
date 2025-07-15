@@ -1,5 +1,3 @@
-
-
 #ifndef VECTOR_H
 #define VECTOR_H
 
@@ -9,6 +7,7 @@
 #include <cmath>
 #include <type_traits>
 #include <utility>
+#include <cstring>
 
 template <class T>
 class Vector{
@@ -91,7 +90,6 @@ public:
     
     // operator=
     Vector & operator=( const Vector& other ){
-        std::cout << "assigment operator" << std::endl;
         if(this == &other){
             return *this;
         }
@@ -115,7 +113,6 @@ public:
     }
     
     Vector & operator=(Vector&& other){
-        std::cout << "move assigment operator" << std::endl;
         if(this == &other){
             return *this;
         }

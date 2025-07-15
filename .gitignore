@@ -28,3 +28,9 @@ RB Tree/
 AVL -SIMPLE/build/
 
 AVL -SIMPLE/.vscode/
+
+vector/build/
+
+Hash Table/build/
+
+forward_list/build/

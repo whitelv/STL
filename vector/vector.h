@@ -263,7 +263,7 @@ public:
     }
     
     const_iterator  cend() const{
-        return vec;
+        return vec + size;
     }
     
     

@@ -89,7 +89,7 @@ public:
     // * clear
     void clear()
     {
-        DFS([](Node *node)
+        BFS([](Node *node)
             { delete node; });
         root = nullptr;
     }
@@ -99,7 +99,7 @@ public:
     // * display
     void display()
     {
-        DFS([](Node *node)
+        BFS([](Node *node)
             { std::cout << "[ " << node->key << " : " << node->value << " ], " << std::flush; });
     }
 
@@ -135,7 +135,7 @@ public:
     BST() : root{nullptr} {}
     ~BST()
     {
-        DFS([](Node *node)
+        BFS([](Node *node)
             { delete node; });
     }
 
@@ -223,8 +223,8 @@ private:
         return successor;
     }
 
-    // * DFS
-    void DFS(std::function<void(Node *)> func)
+    // * BFS
+    void BFS(std::function<void(Node *)> func)
     {
         if (root == nullptr)
             return;

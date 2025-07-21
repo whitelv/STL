@@ -224,11 +224,10 @@ public:
             return;
         }
         first_array();
-
         auto it = ilist.begin();
         while (it != ilist.end())
         {
-            push_front(*it++);
+            push_back(*it++);
         }
     }
 
@@ -376,6 +375,7 @@ private:
         map[map_offset] = array;
     }
 
+public:
     // ! only for studying purposes
     void display() const
     {

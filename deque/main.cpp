@@ -10,7 +10,15 @@
 
 int main(){
 
-    Deque<int> d  = {1,2,3,4,4};
+    Deque<int> int_deque;
+
+    for (int i = 0; i < 10; i++)
+    {
+        int_deque.push_front(i + 1);
+    }
+
+
+    int_deque.display();
  
 
     return 0;

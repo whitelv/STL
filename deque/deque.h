@@ -184,6 +184,10 @@ public:
 
     T &operator[](size_t index)
     {
+        if (index >= size_m)
+        {
+            throw std::out_of_range("Error: out of range");
+        }
 
         size_t number = index + array_offset;
         size_t intPart = number / array_size;
@@ -197,6 +201,10 @@ public:
 
     const T &operator[](size_t index) const
     {
+        if (index >= size_m)
+        {
+            throw std::out_of_range("Error: out of range");
+        }
 
         size_t number = index + array_offset;
         size_t intPart = number / array_size;
@@ -261,7 +269,6 @@ public:
     // * Assignment operator
     Deque &operator=(const Deque &other)
     {
-        std::cout << "aa" << std::endl;
         if (this == &other)
         {
             return *this;
@@ -389,7 +396,7 @@ public:
         }
     }
 
-public:
+private:
     T **map;
     size_t size_m;
     size_t map_offset;

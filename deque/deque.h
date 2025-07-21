@@ -223,7 +223,6 @@ public:
         {
             return;
         }
-        first_array();
         auto it = ilist.begin();
         while (it != ilist.end())
         {

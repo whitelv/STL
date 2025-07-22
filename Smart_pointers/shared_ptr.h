@@ -28,7 +28,7 @@ public:
     {
         delete_object();
         pointer = p;
-        *control = {1, 0, pointer};
+        control = new control_block<T>{1, 0, pointer};
     }
 
     // * swap
@@ -56,8 +56,7 @@ public:
 public:
     // * Constructor
     Shared_ptr() : pointer{nullptr}, control{nullptr} {}
-    template <class Y>
-    explicit Shared_ptr(Y *ptr) : pointer{ptr}, control{new control_block<T>{1, 0, pointer}} {}
+    explicit Shared_ptr(T *ptr) : pointer{ptr}, control{new control_block<T>{1, 0, pointer}} {}
     Shared_ptr(const Shared_ptr &x) noexcept : pointer{x.pointer}, control{x.control}
     {
         if (control == nullptr)

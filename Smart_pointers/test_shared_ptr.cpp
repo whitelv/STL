@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 #include "shared_ptr.h"
+#include "weak_ptr.h"
 
 class TestClass
 {
@@ -80,6 +81,16 @@ TEST(SharedPtrModule, testStrongWithMoveConstructor)
     EXPECT_EQ(ptr.use_count(), 0);
     EXPECT_EQ(ptr1.use_count(), 1);
 }
+
+TEST(SharedPtrModule, testStrongWithWeakConstuctor){
+    Shared_ptr<int> sh_ptr1 = make_shared<int>(5);
+    Weak_ptr<int> w_ptr = Weak_ptr<int>(sh_ptr1);
+    Shared_ptr<int> sh_ptr2 = Shared_ptr<int>(w_ptr);
+
+    EXPECT_EQ(sh_ptr1.get(), sh_ptr2.get());
+    EXPECT_EQ(sh_ptr1.use_count(), sh_ptr2.use_count());
+}
+
 
 TEST(SharedPtrModule, testPointerAfterCopyAssignment)
 {
@@ -269,3 +280,5 @@ TEST(SharedPtrModule, testEqualityFalse){
     Shared_ptr<int> ptr1 = make_shared<int>(2);
     EXPECT_FALSE((ptr == ptr1));
 }
+
+

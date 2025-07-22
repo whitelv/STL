@@ -17,7 +17,7 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(googletest)
 
-add_executable(tests test_shared_ptr.cpp test_weak_ptr.cpp)
+add_executable(tests tests/test_shared_ptr.cpp tests/test_weak_ptr.cpp)
 target_link_libraries(tests gtest gtest_main)
 
 include(GoogleTest)

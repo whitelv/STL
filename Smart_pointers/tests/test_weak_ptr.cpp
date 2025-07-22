@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
-#include "weak_ptr.h"
-#include "shared_ptr.h"
+#include "../weak_ptr.h"
+#include "../shared_ptr.h"
 
 TEST(WeakPtrModule, testControlBlockIsNullptrAfterDefaulConstructor)
 {

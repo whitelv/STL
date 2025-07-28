@@ -42,3 +42,13 @@ Smart_pointers/.vscode/
 BubbleSort/build/
 
 InsertionSort/build/
+
+QuickSortLomuto/build/
+
+QuickSortHoare -Hybrid/build/
+
+QuickSortHoare/build/
+
+MergeSort/build/
+
+QuickSortHoare -Hybrid/

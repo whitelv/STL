@@ -11,10 +11,11 @@ void BubbleSort(Collection &con, size_t size, Compare comp = Compare())
     {
         return;
     }
-    bool is_sorted = true;
+    bool is_sorted;
 
     for (size_t i = 0; i < size; i++)
     {
+        bool is_sorted = true;
         for (size_t j = 0; j < size - i - 1; j++)
         {
             if (comp(con[j], con[j + 1]))
@@ -28,6 +29,5 @@ void BubbleSort(Collection &con, size_t size, Compare comp = Compare())
         {
             break;
         }
-        is_sorted = true;
     }
 }

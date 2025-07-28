@@ -1,11 +1,12 @@
 #include <gtest/gtest.h>
+#include "MergeSort.h"
 #include <vector>
-#include "InsertionSort.h"
+
 
 template <typename T>
 bool custom_sort(const T &a, const T &b)
 {
-    return a < b;
+    return a > b;
 }
 
 struct customFunctor
@@ -13,132 +14,133 @@ struct customFunctor
     template <typename T>
     bool operator()(const T &a, const T &b)
     {
-        return a < b;
+        return a > b;
     }
 };
 
-TEST(InsertionModule, testSortWithEmptyCollection)
+
+TEST(MergeSortModule, testSortWithEmptyCollection)
 {
     std::vector<int> v;
-    EXPECT_NO_FATAL_FAILURE(InsertionSort(v, 0));
+    EXPECT_NO_FATAL_FAILURE(merge_sort(v, 0));
 }
 
-TEST(InsertionModule, testSortWithWrongSizeCollection)
+TEST(MergeSortModule, testSortWithWrongSizeCollection)
 {
     std::vector<int> unsorted_v{4, 3, 2, 1, 10, 9, 8, 7};
     std::vector<int> sorted_v{1, 2, 3, 4, 10, 9, 8, 7};
-    InsertionSort(unsorted_v, 4);
+    merge_sort(unsorted_v, 4);
     EXPECT_EQ(unsorted_v, sorted_v);
 }
 
-TEST(InsertionModule, testSortWithDiffirentIntVectorDefaultComp)
+TEST(MergeSortModule, testSortWithDiffirentIntVectorDefaultComp)
 {
     std::vector<int> unsorted_v{4, 3, 5, 6, 7, 2, 1};
     std::vector<int> sorted_v{1, 2, 3, 4, 5, 6, 7};
-    InsertionSort(unsorted_v, unsorted_v.size());
+    merge_sort(unsorted_v, unsorted_v.size());
     EXPECT_EQ(unsorted_v, sorted_v);
 }
 
-TEST(InsertionModule, testSortWithSameIntVectorDefaultComp)
+TEST(MergeSortModule, testSortWithSameIntVectorDefaultComp)
 {
     std::vector<int> unsorted_v{1, 1, 1, 1, 1, 1};
     std::vector<int> sorted_v{1, 1, 1, 1, 1, 1};
-    InsertionSort(unsorted_v, unsorted_v.size());
+    merge_sort(unsorted_v, unsorted_v.size());
     EXPECT_EQ(unsorted_v, sorted_v);
 }
 
-TEST(InsertionModule, testSortWithDuplicatesIntVectorDefaultComp)
+TEST(MergeSortModule, testSortWithDuplicatesIntVectorDefaultComp)
 {
     std::vector<int> unsorted_v{1, 2, 1, 1, 2, 2};
     std::vector<int> sorted_v{1, 1, 1, 2, 2, 2};
-    InsertionSort(unsorted_v, unsorted_v.size());
+    merge_sort(unsorted_v, unsorted_v.size());
     EXPECT_EQ(unsorted_v, sorted_v);
 }
 
-TEST(InsertionModule, testSortWithSortedIntVectorDefaultComp)
+TEST(MergeSortModule, testSortWithSortedIntVectorDefaultComp)
 {
     std::vector<int> unsorted_v{1, 2, 3, 4, 5, 6, 7};
     std::vector<int> sorted_v{1, 2, 3, 4, 5, 6, 7};
-    InsertionSort(unsorted_v, unsorted_v.size());
+    merge_sort(unsorted_v, unsorted_v.size());
     EXPECT_EQ(unsorted_v, sorted_v);
 }
 
-TEST(InsertionModule, testSortWithNegativeIntVectorDefaultComp)
+TEST(MergeSortModule, testSortWithNegativeIntVectorDefaultComp)
 {
     std::vector<int> unsorted_v{1, 2, 3, 0, -1, -2, -3};
     std::vector<int> sorted_v{-3, -2, -1, 0, 1, 2, 3};
-    InsertionSort(unsorted_v, unsorted_v.size());
+    merge_sort(unsorted_v, unsorted_v.size());
     EXPECT_EQ(unsorted_v, sorted_v);
 }
 
-TEST(InsertionModule, testSortWithDoubleVectorDefaultComp)
+TEST(MergeSortModule, testSortWithDoubleVectorDefaultComp)
 {
     std::vector<double> unsorted_v{1.1, 1.3, 1.2, 1.0, 1.5, 1.6, 1.4};
     std::vector<double> sorted_v{1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6};
-    InsertionSort(unsorted_v, unsorted_v.size());
+    merge_sort(unsorted_v, unsorted_v.size());
     EXPECT_EQ(unsorted_v, sorted_v);
 }
 
-TEST(InsertionModule, testSortWithDifferentIntRawArrayDefaultComp)
+TEST(MergeSortModule, testSortWithDifferentIntRawArrayDefaultComp)
 {
     int unsorted_arr[] = {4, 3, 5, 6, 7, 2, 1};
     int sorted_arr[] = {1, 2, 3, 4, 5, 6, 7};
-    InsertionSort(unsorted_arr, 7);
+    merge_sort(unsorted_arr, 7);
     for (size_t i = 0; i < 7; i++)
     {
         ASSERT_EQ(unsorted_arr[i], sorted_arr[i]);
     }
 }
 
-TEST(InsertionModule, testSortWithSameIntRawArrayDefaultComp)
+TEST(MergeSortModule, testSortWithSameIntRawArrayDefaultComp)
 {
     int unsorted_arr[] = {1, 1, 1, 1, 1, 1};
     int sorted_arr[] = {1, 1, 1, 1, 1, 1};
-    InsertionSort(unsorted_arr, 6);
+    merge_sort(unsorted_arr, 6);
     for (size_t i = 0; i < 6; i++)
     {
         ASSERT_EQ(unsorted_arr[i], sorted_arr[i]);
     };
 }
 
-TEST(InsertionModule, testSortWithDuplicatesIntRawArrayDefaultComp)
+TEST(MergeSortModule, testSortWithDuplicatesIntRawArrayDefaultComp)
 {
     int unsorted_arr[] = {1, 2, 1, 1, 2, 2};
     int sorted_arr[] = {1, 1, 1, 2, 2, 2};
-    InsertionSort(unsorted_arr, 6);
+    merge_sort(unsorted_arr, 6);
     for (size_t i = 0; i < 6; i++)
     {
         ASSERT_EQ(unsorted_arr[i], sorted_arr[i]);
     };
 }
 
-TEST(InsertionModule, testSortWithSortedRawArrayDefaultComp)
+TEST(MergeSortModule, testSortWithSortedRawArrayDefaultComp)
 {
     int unsorted_arr[] = {1, 2, 3, 4, 5, 6, 7};
     int sorted_arr[] = {1, 2, 3, 4, 5, 6, 7};
-    InsertionSort(unsorted_arr, 7);
+    merge_sort(unsorted_arr, 7);
     for (size_t i = 0; i < 7; i++)
     {
         ASSERT_EQ(unsorted_arr[i], sorted_arr[i]);
     };
 }
 
-TEST(InsertionModule, testSortWithNegativeIntRawArrayDefaultComp)
+TEST(MergeSortModule, testSortWithNegativeIntRawArrayDefaultComp)
 {
     int unsorted_arr[] = {1, 2, 3, 0, -1, -2, -3};
     int sorted_arr[] = {-3, -2, -1, 0, 1, 2, 3};
-    InsertionSort(unsorted_arr, 7);
+    merge_sort(unsorted_arr, 7);
     for (size_t i = 0; i < 7; i++)
     {
         ASSERT_EQ(unsorted_arr[i], sorted_arr[i]);
     };
 }
 
-TEST(InsertionModule, testSortWithDoubleRawArrayDefaultComp)
+TEST(MergeSortModule, testSortWithDoubleRawArrayDefaultComp)
 {
     double unsorted_arr[] = {1.1, 1.3, 1.2, 1.0, 1.5, 1.6, 1.4};
     double sorted_arr[] = {1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6};
-    InsertionSort(unsorted_arr, 7);
+    merge_sort(unsorted_arr, 7);
     for (size_t i = 0; i < 7; i++)
     {
         ASSERT_EQ(unsorted_arr[i], sorted_arr[i]);
@@ -146,68 +148,68 @@ TEST(InsertionModule, testSortWithDoubleRawArrayDefaultComp)
 }
 
 
-TEST(InsertionModule, testSortWithDiffirentCharCstringDefaultComp)
+TEST(MergeSortModule, testSortWithDiffirentCharCstringDefaultComp)
 {
     char unsorted_str[] = "dbcafe";
     char sorted_str[] = "abcdef";
-    InsertionSort(unsorted_str, 6);
+    merge_sort(unsorted_str, 6);
     EXPECT_STREQ(unsorted_str, sorted_str);
 }
 
-TEST(InsertionModule, testSortWithSameCharCstringDefaultComp)
+TEST(MergeSortModule, testSortWithSameCharCstringDefaultComp)
 {
     char unsorted_str[] = "aaaaaa";
     char sorted_str[] = "aaaaaa";
-    InsertionSort(unsorted_str, 6);
+    merge_sort(unsorted_str, 6);
     EXPECT_STREQ(unsorted_str, sorted_str);
 }
 
-TEST(InsertionModule, testSortWithDuplicateCharCstringDefaultComp)
+TEST(MergeSortModule, testSortWithDuplicateCharCstringDefaultComp)
 {
     char unsorted_str[] = "ababab";
     char sorted_str[] = "aaabbb";
-    InsertionSort(unsorted_str, 6);
+    merge_sort(unsorted_str, 6);
     EXPECT_STREQ(unsorted_str, sorted_str);
 }
 
-TEST(InsertionModule, testSortWithSortedCharCstringDefaultComp)
+TEST(MergeSortModule, testSortWithSortedCharCstringDefaultComp)
 {
     char unsorted_str[] = "abcdef";
     char sorted_str[] = "abcdef";
-    InsertionSort(unsorted_str, 6);
+    merge_sort(unsorted_str, 6);
     EXPECT_STREQ(unsorted_str, sorted_str);
 }
 
-TEST(InsertionModule, testSortWithSpaceCharCstringDefaultComp)
+TEST(MergeSortModule, testSortWithSpaceCharCstringDefaultComp)
 {
     char unsorted_str[] = "      ";
     char sorted_str[] = "      ";
-    InsertionSort(unsorted_str, 6);
+    merge_sort(unsorted_str, 6);
     EXPECT_STREQ(unsorted_str, sorted_str);
 }
 
 
-TEST(InsertionModule, testSortWitIntVectorCustomFunction)
+TEST(MergeSortModule, testSortWitIntVectorCustomFunction)
 {
     std::vector<int> unsorted_v{3, 2, 4, 1};
     std::vector<int> sorted_v{4, 3, 2, 1};
-    InsertionSort(unsorted_v, unsorted_v.size(), custom_sort<int>);
+    merge_sort(unsorted_v, unsorted_v.size(), custom_sort<int>);
     EXPECT_EQ(unsorted_v, sorted_v);
 }
 
-TEST(InsertionModule, testSortWitIntVectorCustomFunctor)
+TEST(MergeSortModule, testSortWitIntVectorCustomFunctor)
 {
     std::vector<int> unsorted_v{3, 2, 4, 1};
     std::vector<int> sorted_v{4, 3, 2, 1};
-    InsertionSort(unsorted_v, unsorted_v.size(), customFunctor());
+    merge_sort(unsorted_v, unsorted_v.size(), customFunctor());
     EXPECT_EQ(unsorted_v, sorted_v);
 }
 
-TEST(InsertionModule, testSortWitIntVectorCustomLambda)
+TEST(MergeSortModule, testSortWitIntVectorCustomLambda)
 {
     std::vector<int> unsorted_v{3, 2, 4, 1};
     std::vector<int> sorted_v{4, 3, 2, 1};
-    InsertionSort(unsorted_v, unsorted_v.size(), [](const auto &a, const auto &b)
-               { return a < b; });
+    merge_sort(unsorted_v, unsorted_v.size(), [](const auto &a, const auto &b)
+               { return a > b; });
     EXPECT_EQ(unsorted_v, sorted_v);
 }

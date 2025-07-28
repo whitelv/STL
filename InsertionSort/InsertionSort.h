@@ -10,7 +10,7 @@ void InsertionSort(Collection &col, size_t size, Compare comp = Compare())
     {
         return;
     }
-    std::remove_reference_t<decltype(col[0])> current_el;
+    std::remove_reference_t<decltype(*std::begin(col))> current_el;
     for (size_t i = 1; i < size; i++)
     {
         current_el = col[i];

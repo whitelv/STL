@@ -32,13 +32,6 @@ int main()
     //     std::cout << linearSearch(l.begin(), l.end(), i) << std::endl;
     // }
 
-    std::vector<int> v = {1, 2, 3, 4, 4, 4, 4, 6, 7, 9, 10};
-    std::cout << TimesNBinary(v.begin(), v.end(), 1);
-
-    auto p = findRange(v.begin(), v.end(), 4);
-
-    std::cout << "First element: " << *p.first << std::endl;
-    std::cout << "Second element: " << *(--p.second) << std::endl;
 
     return 0;
 }

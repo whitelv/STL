@@ -4,7 +4,7 @@
 #include <string>
 #include "find.h"
 
-
+// # binarySearch
 TEST(SearchModule, testBinarySearchWithEmptyVector){
     std::vector<int> v;
     EXPECT_NO_FATAL_FAILURE(binarySearch(v.begin(), v.end(), 1));
@@ -65,7 +65,6 @@ TEST(SearchModule, testBinarySearchWithAnyValuesString){
     EXPECT_FALSE(binarySearch(str.begin(), str.end(), 'y'));
 }
 
-
 TEST(SearchModule, testBinarySearchWithEmptyRawArray){
     int arr[0];
     EXPECT_FALSE(binarySearch(arr, arr + 0, 1));
@@ -95,7 +94,7 @@ TEST(SearchModule, testBinarySearchWithAnyValuesRawArray){
     EXPECT_FALSE(binarySearch(arr, arr + 6, -7));
 }
 
-
+// # linearSearch
 TEST(SearchModule, testBinarySearchWithEmptyForwardList){
     std::forward_list<int> f;
     EXPECT_NO_FATAL_FAILURE(linearSearch(f.begin(), f.end(), 1));
@@ -126,6 +125,7 @@ TEST(SearchModule, testBinarySearchWithAnyValuesForwardList){
     EXPECT_FALSE(linearSearch(f.begin(), f.end(), -7));
 }
 
+// # greaterEqual
 TEST(SearchModule, testgreaterEqualThanWithEmptyVector){
     std::vector<int> v;
     EXPECT_NO_FATAL_FAILURE(greaterEqualThan(v.begin(), v.end(), 1));
@@ -147,6 +147,13 @@ TEST(SearchModule, testgreaterEqualThanWithUnsortedSortedVector){
     EXPECT_EQ(*greaterEqualThan(v.begin(), v.end(), 6), 6);
 }
 
+TEST(SearchModule, testgreaterEqualThanWithUnsortedSortedForwardList){
+    std::forward_list<int> f = {5,2,1,6,3,7};
+    EXPECT_EQ(*greaterEqualThan(f.begin(), f.end(), 6), 6);
+}
+
+
+// # greaterThan
 TEST(SearchModule, testgreaterThanWithEmptyVector){
     std::vector<int> v;
     EXPECT_NO_FATAL_FAILURE(greaterThan(v.begin(), v.end(), 1));
@@ -168,3 +175,46 @@ TEST(SearchModule, testgreaterThanWithUnsortedSortedVector){
     EXPECT_EQ(*greaterThan(v.begin(), v.end(), 6), 7);
     EXPECT_EQ(*greaterThan(v.begin(), v.end(), 4), 5);
 }
+
+TEST(SearchModule, testgreaterThanWithUnsortedSortedForwardList){
+    std::forward_list<int> f = {5,2,1,6,3,7};
+    EXPECT_EQ(*greaterThan(f.begin(), f.end(), 6), 7);
+    EXPECT_EQ(*greaterThan(f.begin(), f.end(), 4), 5);
+}
+
+// # greaterEqualThanBinary
+TEST(SearchModule, testgreaterEqualThanBinaryWithEmptyVector){
+    std::vector<int> v;
+    EXPECT_NO_FATAL_FAILURE(greaterEqualThanBinary(v.begin(), v.end(), 1));
+    EXPECT_EQ(greaterEqualThanBinary(v.begin(), v.end(), 1), v.end());
+}
+
+TEST(SearchModule, testgreaterEqualThanBinaryWithSortedVectorTrue){
+    std::vector<int> v = {1,2,3,4,5,7};
+    EXPECT_EQ(*greaterEqualThanBinary(v.begin(), v.end(), 3), 3);
+    EXPECT_EQ(*greaterEqualThanBinary(v.begin(), v.end(), 6), 7);
+}
+
+TEST(SearchModule, testgreaterEqualThanBinaryWithSortedVectorFalse){
+    std::vector<int> v = {1,2,3,4,5};
+    EXPECT_EQ(greaterEqualThanBinary(v.begin(), v.end(), 6), v.end());
+}
+
+//# greaterThanBinary
+TEST(SearchModule, testgreaterThanBinaryWithEmptyVector){
+    std::vector<int> v;
+    EXPECT_NO_FATAL_FAILURE(greaterThanBinary(v.begin(), v.end(), 1));
+    EXPECT_EQ(greaterThanBinary(v.begin(), v.end(), 1), v.end());
+}
+
+TEST(SearchModule, testgreaterThanBinaryWithSortedVectorTrue){
+    std::vector<int> v = {1,2,3,4,5, 7};
+    EXPECT_EQ(*greaterThanBinary(v.begin(), v.end(), 3), 4);
+    EXPECT_EQ(*greaterThanBinary(v.begin(), v.end(), 6), 7);
+}
+
+TEST(SearchModule, testgreaterThanBinaryWithSortedVectorFalse){
+    std::vector<int> v = {1,2,3,4,5};
+    EXPECT_EQ(greaterThanBinary(v.begin(), v.end(), 6), v.end());
+}
+

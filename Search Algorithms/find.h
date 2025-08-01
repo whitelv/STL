@@ -36,10 +36,7 @@ bool binarySearch(RandomAccessIterator begin, RandomAccessIterator end, const T 
             high = --mid;
             continue;
         }
-        else
-        {
-            low = ++mid;
-        }
+        low = ++mid;
     }
     return false;
 }
@@ -93,19 +90,16 @@ RandomAccessIterator greaterEqualThanBinary(RandomAccessIterator begin, RandomAc
     while (low <= high)
     {
         mid = low + (high - low) / 2;
-        display(low, high + 1);
         if (comp(*mid, target))
         {
             low = mid + 1;
+            continue;
         }
-        else if (mid == begin || comp(*(mid - 1), target))
+        if (mid == begin || comp(*(mid - 1), target))
         {
             break;
         }
-        else
-        {
-            high = mid - 1;
-        }
+        high = mid - 1;
     }
     return low > high ? low : mid;
 }
@@ -152,15 +146,13 @@ size_t findInsertPosition(RandomAccessIterator begin, RandomAccessIterator end, 
         if (comp(*mid, target))
         {
             low = mid + 1;
+            continue;
         }
         else if (mid == begin || comp(*(mid - 1), target))
         {
             break;
         }
-        else
-        {
-            high = mid - 1;
-        }
+        high = mid - 1;
     }
     return low > high ? low - begin : mid - begin;
 }
@@ -186,12 +178,14 @@ RandomAccessIterator firstEqual(RandomAccessIterator begin, RandomAccessIterator
         if (*mid < target)
         {
             low = mid + 1;
+            continue;
         }
-        else if (*mid > target)
+        if (*mid > target)
         {
             high = mid - 1;
+            continue;
         }
-        else if (mid == begin)
+        if (mid == begin)
         {
             if (*mid == target)
             {
@@ -199,15 +193,14 @@ RandomAccessIterator firstEqual(RandomAccessIterator begin, RandomAccessIterator
             }
             break;
         }
-        else if (*(mid - 1) == target)
+        if (*(mid - 1) == target)
         {
             high = mid - 1;
+            continue;
         }
-        else
-        {
-            is_found = true;
-            break;
-        }
+
+        is_found = true;
+        break;
     }
     return is_found ? mid : end;
 }
@@ -226,17 +219,18 @@ RandomAccessIterator lastEqual(RandomAccessIterator begin, RandomAccessIterator 
 
     while (low <= high)
     {
-        display(low, high + 1);
         mid = low + (high - low) / 2;
         if (*mid < target)
         {
             low = mid + 1;
+            continue;
         }
-        else if (*mid > target)
+        if (*mid > target)
         {
             high = mid - 1;
+            continue;
         }
-        else if (mid == end - 1)
+        if (mid == end - 1)
         {
             if (*mid == target)
             {
@@ -244,15 +238,14 @@ RandomAccessIterator lastEqual(RandomAccessIterator begin, RandomAccessIterator 
             }
             break;
         }
-        else if (*(mid + 1) == target)
+        if (*(mid + 1) == target)
         {
             low = mid + 1;
+            continue;
         }
-        else
-        {
-            is_found = true;
-            break;
-        }
+
+        is_found = true;
+        break;
     }
     return is_found ? mid : end;
 }
@@ -531,7 +524,7 @@ InputIterator findFirstUnsorted(InputIterator begin, InputIterator end, Compare 
 
 // # Partition even and odd numbers, then find the first odd number.
 template <typename RandomAccessIterator, typename Predicate>
-void partitionOddEven(RandomAccessIterator begin, RandomAccessIterator end, Predicate predicate)
+void Partition(RandomAccessIterator begin, RandomAccessIterator end, Predicate predicate)
 {
     size_t size = std::distance(begin, end);
     if (size < 2)
@@ -542,8 +535,8 @@ void partitionOddEven(RandomAccessIterator begin, RandomAccessIterator end, Pred
     size_t middle = std::ceil(size / 2.0) - 1;
     auto newBeginEnd = begin + middle;
 
-    partitionOddEven(begin, newBeginEnd + 1, predicate);
-    partitionOddEven(newBeginEnd + 1, end, predicate);
+    Partition(begin, newBeginEnd + 1, predicate);
+    Partition(newBeginEnd + 1, end, predicate);
 
     std::vector<std::remove_reference_t<decltype(*begin)>> vec;
 
@@ -592,8 +585,8 @@ RandomAccessIterator partitionAndFindFirstOdd(RandomAccessIterator begin, Random
         return end;
     }
 
-    partitionOddEven(begin, end, [](const auto &a)
-                     { return a % 2 != 0; });
+    Partition(begin, end, [](const auto &a)
+              { return a % 2 != 0; });
     return *begin % 2 != 0 ? begin : end;
 }
 
@@ -637,7 +630,7 @@ InputIterator findFirstAboveMean(InputIterator begin, InputIterator end)
 {
     if (begin == end)
     {
-        return begin;
+        return end;
     }
     double sum{};
     size_t count = 0;

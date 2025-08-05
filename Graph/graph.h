@@ -35,49 +35,7 @@ public:
         return p1.length < p2.length;
     }
 
-    std::vector<size_t> dijkstra(size_t id)
-    {
-        size_t times = 0;
-        if (id >= edges.size())
-        {
-            throw std::out_of_range("Error: No such edge id");
-        }
 
-        std::vector<bool> visited(edges.size(), false);
-        std::vector<size_t> distance(edges.size(), std::numeric_limits<size_t>::max());
-        Heap<PathLength> heap;
-
-        visited[id] = true;
-        distance[id] = 0;
-        heap.insert(PathLength(id, distance[id]));
-
-        while (!heap.empty())
-        {
-            auto min = *heap.get_min();
-            auto begin = adjacency_list[min.id].begin();
-            auto end = adjacency_list[min.id].end();
-
-            while (begin != end)
-            {
-                if (visited[begin->to_id] != true)
-                {
-                    auto dist = min.length + begin->weight;
-                    if (dist < distance[begin->to_id])
-                    {
-                        distance[begin->to_id] = dist;
-                        heap.insert(PathLength(begin->to_id, distance[begin->to_id]));
-                    }
-                }
-                times++;
-                begin++;
-            }
-            visited[min.id] = true;
-            heap.removeMin();
-            
-        }
-        std::cout << times << std::endl;
-        return distance;
-    }
 
     void add_edge(const T &value)
     {
@@ -201,6 +159,47 @@ public:
                 s.pop();
             }
         }
+    }
+
+    std::vector<size_t> dijkstra(size_t id)
+    {
+        size_t times = 0;
+        if (id >= edges.size())
+        {
+            throw std::out_of_range("Error: No such edge id");
+        }
+
+        std::vector<bool> visited(edges.size(), false);
+        std::vector<size_t> distance(edges.size(), std::numeric_limits<size_t>::max());
+        Heap<PathLength> heap;
+
+        visited[id] = true;
+        distance[id] = 0;
+        heap.insert(PathLength(id, distance[id]));
+
+        while (!heap.empty())
+        {
+            auto min = *heap.get_min();
+            auto begin = adjacency_list[min.id].begin();
+            auto end = adjacency_list[min.id].end();
+
+            while (begin != end)
+            {
+                if (visited[begin->to_id] != true)
+                {
+                    auto dist = min.length + begin->weight;
+                    if (dist < distance[begin->to_id])
+                    {
+                        distance[begin->to_id] = dist;
+                        heap.insert(PathLength(begin->to_id, distance[begin->to_id]));
+                    }
+                }
+                begin++;
+            }
+            visited[min.id] = true;
+            heap.removeMin();
+        }
+        return distance;
     }
 
     void display_edges() const

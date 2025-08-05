@@ -37,6 +37,7 @@ public:
 
     std::vector<size_t> dijkstra(size_t id)
     {
+        size_t times = 0;
         if (id >= edges.size())
         {
             throw std::out_of_range("Error: No such edge id");
@@ -50,10 +51,31 @@ public:
         distance[id] = 0;
         heap.insert(PathLength(id, distance[id]));
 
-        auto min = heap.get_min();
-        auto begin = adjacency_list[min->id].begin();
-        auto end = adjacency_list[min->id].end();
+        while (!heap.empty())
+        {
+            auto min = *heap.get_min();
+            auto begin = adjacency_list[min.id].begin();
+            auto end = adjacency_list[min.id].end();
 
+            while (begin != end)
+            {
+                if (visited[begin->to_id] != true)
+                {
+                    auto dist = min.length + begin->weight;
+                    if (dist < distance[begin->to_id])
+                    {
+                        distance[begin->to_id] = dist;
+                        heap.insert(PathLength(begin->to_id, distance[begin->to_id]));
+                    }
+                }
+                times++;
+                begin++;
+            }
+            visited[min.id] = true;
+            heap.removeMin();
+            
+        }
+        std::cout << times << std::endl;
         return distance;
     }
 

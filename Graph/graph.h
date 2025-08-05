@@ -50,8 +50,10 @@ public:
         distance[id] = 0;
         heap.insert(PathLength(id, distance[id]));
 
-        std::cout << heap.get_min() << std::endl;
-        
+        auto min = heap.get_min();
+        auto begin = adjacency_list[min->id].begin();
+        auto end = adjacency_list[min->id].end();
+
         return distance;
     }
 

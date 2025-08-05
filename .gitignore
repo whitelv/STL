@@ -54,3 +54,7 @@ MergeSort/build/
 QuickSortHoare -Hybrid/
 
 Search Algorithms/build/
+
+Graph/build/
+
+Graph/.vscode/

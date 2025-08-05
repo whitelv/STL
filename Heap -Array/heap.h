@@ -12,7 +12,7 @@ class Heap
     // ** public functions
 public:
     Heap() : heap{} {};
-    ~Heap(){};
+    ~Heap() {};
 
     // # insert
     void insert(const T &value)
@@ -42,7 +42,8 @@ public:
     }
 
     // # change_value
-    void change_value(size_t index, const T &value){
+    void change_value(size_t index, const T &value)
+    {
         if (index >= heap.Size())
         {
             throw std::out_of_range("Error: cannot access nothing");
@@ -58,6 +59,12 @@ public:
         heapify_down(index);
     }
 
+    // # empty
+    bool empty()
+    {
+        return heap.empty();
+    }
+
     // #display
     void display() const
     {
@@ -69,11 +76,10 @@ public:
         std::cout << std::endl;
     }
 
-    const T * get_min() const{
+    const T *get_min() const
+    {
         return !heap.empty() ? heap.data() : nullptr;
     }
-
-    
 
     // ** helper functions
 private:
@@ -137,7 +143,6 @@ private:
         return (ch_index - 1) / 2;
     }
 
-    
     // ** class members
 private:
     Vector<T> heap;

@@ -35,22 +35,20 @@ public:
         return p1.length < p2.length;
     }
 
-
-
-    void add_edge(const T &value)
+    void add_vertex(const T &value)
     {
-        edges.push_back(create_new_edge(value));
-        adjacency_list.resize(edges.size());
+        vertices.push_back(create_new_vertex(value));
+        adjacency_list.resize(vertices.size());
     }
 
-    void add_vertex(size_t from_id, size_t to_id, size_t weight)
+    void add_edge(size_t from_id, size_t to_id, size_t weight)
     {
         if (from_id == to_id)
         {
             throw std::invalid_argument("Error: vertex to itself");
         }
 
-        if (from_id >= edges.size() || to_id >= edges.size())
+        if (from_id >= vertices.size() || to_id >= vertices.size())
         {
             throw std::out_of_range("Error: No such edge id");
         }
@@ -60,8 +58,8 @@ public:
             throw std::out_of_range("Error: Vertex between from_id & to_id exists");
         }
 
-        adjacency_list[from_id].push_front(create_new_vertex(to_id, weight));
-        adjacency_list[to_id].push_front(create_new_vertex(from_id, weight));
+        adjacency_list[from_id].push_front(create_new_edge(to_id, weight));
+        adjacency_list[to_id].push_front(create_new_edge(from_id, weight));
     }
 
     bool check_for_vertex(size_t from_id, size_t to_id)
@@ -70,7 +68,7 @@ public:
         {
             throw std::invalid_argument("Error: vertex to itself");
         }
-        if (from_id >= edges.size() || to_id >= edges.size())
+        if (from_id >= vertices.size() || to_id >= vertices.size())
         {
             throw std::out_of_range("Error: No such edge id");
         }
@@ -92,12 +90,12 @@ public:
     template <typename Callback>
     void BFS(size_t id, Callback callback)
     {
-        if (id >= edges.size())
+        if (id >= vertices.size())
         {
             throw std::out_of_range("Error: No such edge id");
         }
         std::queue<size_t> q;
-        std::vector<bool> visited(edges.size(), false);
+        std::vector<bool> visited(vertices.size(), false);
 
         q.push(id);
         visited[id] = true;
@@ -117,25 +115,93 @@ public:
                 }
                 begin++;
             }
-            callback(edges[front].value);
+            callback(vertices[front].value);
             q.pop();
         }
+    }
+
+    std::vector<std::pair<size_t, size_t>> find_bridges()
+    {
+        if (vertices.empty())
+        {
+            throw std::invalid_argument("Error: No Vertices");
+        }
+        std::stack<size_t> s;
+        std::vector<bool> visited(vertices.size(), false);
+        std::vector<size_t> time_in(vertices.size(), 0);
+        std::vector<size_t> f_up(vertices.size(), 0);
+        std::vector<size_t> parents(vertices.size(), 0);
+        std::vector<std::pair<size_t, size_t>> brigdes;
+        size_t time = 0;
+
+        s.push(0);
+        visited[0] = true;
+        time_in[0] = time++;
+        f_up[0] = time_in[0];
+
+        while (!s.empty())
+        {
+            auto top = s.top();
+            auto begin = adjacency_list[top].begin();
+            auto end = adjacency_list[top].end();
+
+            while (begin != end)
+            {
+                if (begin->to_id == parents[top])
+                {
+                    begin++;
+                    continue;
+                }
+                if (visited[begin->to_id] == true)
+                {
+                    f_up[top] = std::min(f_up[top], time_in[begin->to_id]);
+                    begin++;
+                    continue;
+                }
+                auto next = begin->to_id;
+                s.push(next);
+                visited[next] = true;
+                time_in[next] = time++;
+                f_up[next] = time_in[next];
+                parents[next] = top;
+                break;
+            }
+            if (begin == end)
+            {
+                begin = adjacency_list[top].begin();
+                end = adjacency_list[top].end();
+                while (begin != end)
+                {
+                    if (f_up[begin->to_id] > time_in[top])
+                    {
+                        brigdes.push_back({top, begin->to_id});
+                    }
+                    begin++;
+                }
+                s.pop();
+                if (!s.empty())
+                {
+                    f_up[s.top()] = std::min(f_up[s.top()], f_up[top]);
+                }
+            }
+        }
+        return brigdes;
     }
 
     template <typename Callback>
     void DFS(size_t id, Callback callback)
     {
-        if (id >= edges.size())
+        if (id >= vertices.size())
         {
             throw std::out_of_range("Error: No such edge id");
         }
 
         std::stack<size_t> s;
-        std::vector<bool> visited(edges.size(), false);
+        std::vector<bool> visited(vertices.size(), false);
 
         s.push(id);
         visited[id] = true;
-        callback(edges[id].value);
+        callback(vertices[id].value);
 
         while (!s.empty())
         {
@@ -149,7 +215,7 @@ public:
                     auto next = begin->to_id;
                     s.push(next);
                     visited[next] = true;
-                    callback(edges[next].value);
+                    callback(vertices[next].value);
                     break;
                 }
                 begin++;
@@ -164,13 +230,13 @@ public:
     std::vector<size_t> dijkstra(size_t id)
     {
         size_t times = 0;
-        if (id >= edges.size())
+        if (id >= vertices.size())
         {
             throw std::out_of_range("Error: No such edge id");
         }
 
-        std::vector<bool> visited(edges.size(), false);
-        std::vector<size_t> distance(edges.size(), std::numeric_limits<size_t>::max());
+        std::vector<bool> visited(vertices.size(), false);
+        std::vector<size_t> distance(vertices.size(), std::numeric_limits<size_t>::max());
         Heap<PathLength> heap;
 
         visited[id] = true;
@@ -202,13 +268,14 @@ public:
         return distance;
     }
 
-    void display_edges() const
+    std::vector<T> get_vertices_values() const
     {
-        for (size_t i = 0; i < edges.size(); i++)
+        std::vector<T> values;
+        for (size_t i = 0; i < vertices.size(); i++)
         {
-            std::cout << "[" << edges[i].id << ", " << edges[i].value << "], ";
+            values.push_back(vertices[i].value);
         }
-        std::cout << std::endl;
+        return values;
     }
 
     void display_adjacency_list() const
@@ -230,17 +297,17 @@ public:
         }
     }
 
-    Edge create_new_edge(const T &value)
+    Edge create_new_vertex(const T &value)
     {
-        return Edge{edges.size(), value};
+        return Edge{vertices.size(), value};
     }
 
-    Vertex create_new_vertex(size_t to_id, size_t weight)
+    Vertex create_new_edge(size_t to_id, size_t weight)
     {
         return Vertex{to_id, weight};
     }
 
 public:
     std::vector<std::forward_list<Vertex>> adjacency_list;
-    std::vector<Edge> edges;
+    std::vector<Edge> vertices;
 };

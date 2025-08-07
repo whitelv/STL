@@ -12,13 +12,13 @@ template <typename T>
 class Graph
 {
 public:
-    struct Edge
+    struct Vertex
     {
         size_t id;
         T value;
     };
 
-    struct Vertex
+    struct Edge
     {
         size_t to_id;
         size_t weight;
@@ -55,7 +55,7 @@ public:
 
         if (check_for_edge(from_id, to_id))
         {
-            throw std::invalid_argument("Error: Vertex between from_id & to_id exists");
+            throw std::invalid_argument("Error: Edge between from_id & to_id exists");
         }
 
         adjacency_list[from_id].push_front(create_new_edge(to_id, weight));
@@ -297,17 +297,18 @@ public:
         }
     }
 
-    Edge create_new_vertex(const T &value)
+
+    Vertex create_new_vertex(const T &value)
     {
-        return Edge{vertices.size(), value};
+        return Vertex{vertices.size(), value};
     }
 
-    Vertex create_new_edge(size_t to_id, size_t weight)
+    Edge create_new_edge(size_t to_id, size_t weight)
     {
-        return Vertex{to_id, weight};
+        return Edge{to_id, weight};
     }
 
 public:
-    std::vector<std::forward_list<Vertex>> adjacency_list;
-    std::vector<Edge> vertices;
+    std::vector<std::forward_list<Edge>> adjacency_list;
+    std::vector<Vertex> vertices;
 };

@@ -189,16 +189,17 @@ TEST(GraphModule, testDijkstraFromExistentVertexOneVertex)
 TEST(GraphModule, testDijkstraFromExistentVertexCase1)
 {
     Graph<int> graph{
-        {0, 0, 1, 1, 10},
-        {0, 0, 2, 2, 2},
-        {2, 2, 4, 4, 4},
-        {4, 4, 1, 1, 1},
-        {1, 1, 3, 3, 5},
-        {3, 3, 6, 6, 3},
-        {4, 4, 6, 6, 8},
-        {6, 6, 7, 7, 4},
-        {7, 7, 5, 5, 6},
-        {5, 5, 2, 2, 12}};
+        {0, 0, 1, 1, 10}, // V0 — V1
+        {0, 0, 2, 2, 2},  // V0 — V2
+        {2, 2, 4, 4, 4},  // V2 — V4
+        {4, 4, 1, 1, 1},  // V4 — V1
+        {1, 1, 3, 3, 5},  // V1 — V3
+        {3, 3, 6, 6, 3},  // V3 — V6
+        {4, 4, 6, 6, 8},  // V4 — V6
+        {6, 6, 7, 7, 4},  // V6 — V7
+        {7, 7, 5, 5, 6},  // V7 — V5
+        {5, 5, 2, 2, 12}  // V5 — V2
+    };
     std::vector<size_t> results = {0, 7, 2, 12, 6, 14, 14, 18};
     std::unordered_map<size_t, size_t> test = graph.dijkstra(0);
 
@@ -211,15 +212,16 @@ TEST(GraphModule, testDijkstraFromExistentVertexCase1)
 TEST(GraphModule, testDijkstraFromExistentVertexCase2)
 {
     Graph<int> graph{
-        {0, 0, 2, 2, 6},
-        {0, 0, 3, 3, 3},
-        {0, 0, 4, 4, 2},
-        {1, 1, 6, 6, 1},
-        {2, 2, 5, 5, 6},
-        {4, 4, 6, 6, 9},
-        {4, 4, 7, 7, 5},
-        {6, 6, 7, 7, 3},
+        {0, 0, 2, 2, 6}, // V0 — V2
+        {0, 0, 3, 3, 3}, // V0 — V3
+        {0, 0, 4, 4, 2}, // V0 — V4
+        {1, 1, 6, 6, 1}, // V1 — V6
+        {2, 2, 5, 5, 6}, // V2 — V5
+        {4, 4, 6, 6, 9}, // V4 — V6
+        {4, 4, 7, 7, 5}, // V4 — V7
+        {6, 6, 7, 7, 3}  // V6 — V7
     };
+
     std::vector<size_t> results = {3, 14, 9, 0, 5, 15, 13, 10};
     std::unordered_map<size_t, size_t> test = graph.dijkstra(3);
 
@@ -264,7 +266,6 @@ TEST(GraphModule, testFindBridgesInGraphCase1)
     EXPECT_EQ(results, test);
 }
 
-
 TEST(GraphModule, testFindBridgesInGraphCase2)
 {
     Graph<int> graph{
@@ -277,7 +278,7 @@ TEST(GraphModule, testFindBridgesInGraphCase2)
         {6, 6, 7, 7, 1}  // V6 — V7
     };
 
-    std::vector<std::pair<size_t, size_t>> results = {{1,0}, {3,2}, {3,1}, {4,5}, {4,3}, {6,4}, {7,6}};
+    std::vector<std::pair<size_t, size_t>> results = {{1, 0}, {3, 2}, {3, 1}, {4, 5}, {4, 3}, {6, 4}, {7, 6}};
     auto test = graph.find_bridges();
 
     EXPECT_EQ(results, test);

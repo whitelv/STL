@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "graph copy.h"
+#include "graph.h"
 
 TEST(GraphModule, testDefaultConstructor)
 {

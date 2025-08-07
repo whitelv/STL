@@ -53,16 +53,16 @@ public:
             throw std::out_of_range("Error: No such edge id");
         }
 
-        if (check_for_vertex(from_id, to_id))
+        if (check_for_edge(from_id, to_id))
         {
-            throw std::out_of_range("Error: Vertex between from_id & to_id exists");
+            throw std::invalid_argument("Error: Vertex between from_id & to_id exists");
         }
 
         adjacency_list[from_id].push_front(create_new_edge(to_id, weight));
         adjacency_list[to_id].push_front(create_new_edge(from_id, weight));
     }
 
-    bool check_for_vertex(size_t from_id, size_t to_id)
+    bool check_for_edge(size_t from_id, size_t to_id)
     {
         if (from_id == to_id)
         {

@@ -26,21 +26,19 @@ int main()
 
     g.find_bridges();
 
-    Graph<int> graph;
-    std::vector<int> result;
-    for (size_t i = 0; i < 10; i++)
-    {
-        if (i % 2)
-        {
-            graph.add_vertex(i * i);
-            result.push_back(i * i);
-        }
-        else
-        {
-            graph.add_vertex(i * i * -i);
-            result.push_back(i * i * -i);
-        }
-    }
-    std::vector<int> test = graph.get_vertices_values();
 
+    Graph<int> graph;
+    for (size_t i = 0; i < 5; i++)
+    {
+        graph.add_vertex(i);
+    }
+
+    graph.add_edge(0, 1, 1);
+    graph.add_edge(0, 2, 1);
+    graph.add_edge(2, 3, 1);
+    graph.add_edge(3, 4, 1);
+    std::vector<size_t> test;
+    std::vector<size_t> result = {0, 2, 3, 4, 1};
+    graph.DFS(0, [&test](const auto &value)
+              { test.push_back(value); });
 }

@@ -126,7 +126,7 @@ public:
     {
         if (!vertices.count(id))
         {
-            throw std::invalid_argument("Error: such vertex doesnt exist yet");
+            throw std::out_of_range("Error: such vertex doesnt exist yet");
         }
         auto begin = adjacency_list[id].begin();
         while (begin != adjacency_list[id].end())

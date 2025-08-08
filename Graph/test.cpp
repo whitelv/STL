@@ -283,3 +283,59 @@ TEST(GraphModule, testFindBridgesInGraphCase2)
 
     EXPECT_EQ(results, test);
 }
+
+TEST(GraphModule, testEraseNonExistentVertexThrow)
+{
+    Graph<int> graph;
+    EXPECT_THROW(graph.erase_vertex(0), std::out_of_range);
+}
+
+TEST(GraphModule, testEraseExistentVertex)
+{
+    Graph<int> graph{
+        {0, 0, 1, 1, 10},
+        {0, 0, 2, 2, 10},
+        {0, 0, 3, 3, 10},
+        {1, 1, 2, 2, 10},
+        {3, 3, 2, 2, 10},
+    };
+    graph.erase_vertex(0);
+    std::vector<size_t> test;
+    std::vector<size_t> result = {1,2,3};
+    graph.BFS(1, [&test](const auto &a)
+              { test.push_back(a); });
+    EXPECT_EQ(test, result);
+}
+
+TEST(GraphModule, testEraseCycleEdgeThrow)
+{
+    Graph<int> graph;
+    graph.add_vertex(0,0);
+    EXPECT_THROW(graph.erase_edge(0, 0), std::invalid_argument);
+}
+
+TEST(GraphModule, testEraseEdgeBetweenNonExistentVerticesThrow)
+{
+    Graph<int> graph;
+    EXPECT_THROW(graph.erase_edge(0, 1), std::out_of_range);
+}
+
+TEST(GraphModule, testEraseNonExistentEdgeThrow)
+{
+    Graph<int> graph;
+    graph.add_vertex(0,0);
+    graph.add_vertex(1,1);
+    EXPECT_THROW(graph.erase_edge(0, 1), std::invalid_argument);
+}
+
+TEST(GraphModule, testEraseExistentEdge)
+{
+    Graph<int> graph{{0,0,1,1,1}};
+    graph.erase_edge(0, 1);
+    std::vector<size_t> test;
+    std::vector<size_t> result{0};
+    graph.BFS(0, [&test](const auto &a)
+              { test.push_back(a); });
+    EXPECT_EQ(test, result);
+
+}

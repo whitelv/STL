@@ -1,0 +1,67 @@
+## 1) Hello from a Thread
+
+**Goal:** Start a thread that prints a line and join it.
+
+**Accept when:**
+- Program prints *exactly once* from the worker thread.
+- Main waits for the worker (no premature exit).
+
+---
+
+## 2) Multiple Threads Printing
+
+**Goal:** Launch 3 separate threads, each prints `"Thread X started"` (X = 0,1,2), then join all.
+
+**Accept when:**
+- Exactly three lines print (order may vary).
+- No thread left unjoined.
+
+---
+
+## 3) Thread Running a Free Function
+
+**Goal:** Write `void printMessage(const std::string&)` and run it in a thread with a custom message.
+
+**Accept when:**
+- Message comes from the function (not a lambda).
+- The argument is passed correctly and displayed.
+
+---
+
+## 4) Thread with Lambda and Delay
+
+**Goal:** Start a thread that prints numbers 1 to 5, sleeping `500ms` between prints.
+
+**Accept when:**
+- Prints 1..5 sequentially (in the thread's output).
+- Main waits for completion.
+
+---
+
+## 5) Passing Parameters by Value vs Reference
+
+**Goal:** Pass a counter variable to a thread both **by value** and **by reference**, and see the difference.
+
+**Accept when:**
+- By-value version does not modify the original variable.
+- By-reference version updates the variable.
+
+---
+
+## 6) Vector of Threads
+
+**Goal:** Create `n` threads (n from user input), each printing `"Thread i working"`, then join all.
+
+**Accept when:**
+- All threads run and complete.
+- No dangling threads at program end.
+
+---
+
+## 7) Lambda Capture Modes
+
+**Goal:** Use `[=]` and `[&]` captures in lambdas running inside threads to understand value vs reference capture.
+
+**Accept when:**
+- By-value capture shows unchanged external variable.
+- By-reference capture shows modified external variable.

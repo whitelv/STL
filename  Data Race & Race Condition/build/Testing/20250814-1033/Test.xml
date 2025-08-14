@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Site BuildName="(empty)"
+	BuildStamp="20250814-1033-Experimental"
+	Name="(empty)"
+	Generator="ctest-4.0.1"
+	CompilerName=""
+	CompilerVersion=""
+	OSName="macOS"
+	Hostname="MacBook-Air-Lubomir.local"
+	OSRelease="15.6"
+	OSVersion="24G84"
+	OSPlatform="arm64"
+	Is64Bits="1"
+	VendorString="Apple"
+	VendorID="Apple"
+	FamilyID="0"
+	ModelID="0"
+	ModelName="Apple M1"
+	ProcessorCacheSize="131072"
+	NumberOfLogicalCPU="8"
+	NumberOfPhysicalCPU="8"
+	TotalVirtualMemory="7168"
+	TotalPhysicalMemory="8192"
+	LogicalProcessorsPerPhysical="8"
+	ProcessorClockFrequency="0"
+	>
+	<Testing>
+		<StartDateTime>Aug 14 14:58 EEST</StartDateTime>
+		<StartTestTime>1755172737</StartTestTime>
+		<TestList/>
+		<EndDateTime>Aug 14 14:58 EEST</EndDateTime>
+		<EndTestTime>1755172737</EndTestTime>
+		<ElapsedMinutes>0</ElapsedMinutes>
+	</Testing>
+</Site>

@@ -1,5 +1,0 @@
-if(EXISTS "/Users/lubomirvitvickij/Desktop/STL/ Data Race & Race Condition/build/tests[1]_tests.cmake")
-  include("/Users/lubomirvitvickij/Desktop/STL/ Data Race & Race Condition/build/tests[1]_tests.cmake")
-else()
-  add_test(tests_NOT_BUILT tests_NOT_BUILT)
-endif()

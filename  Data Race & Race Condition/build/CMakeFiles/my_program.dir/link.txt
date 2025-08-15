@@ -1,1 +1,0 @@
-/usr/bin/clang++ -g CMakeFiles/my_program.dir/main.cpp.o -o my_program 

@@ -25,7 +25,7 @@ TEST(ThreadSumModule, CalculateSumWithSmallVector)
 {
 
     std::vector<int> v = {1, 0, 4, 3, 2, 10};
-    int sum = 20;
+    long long sum = 20;
     EXPECT_EQ(parallelSumSingleThread(v), sum);
     EXPECT_EQ(parallelSumTwoThreads(v), sum);
     EXPECT_EQ(parallelSumNThreads(v, 4), sum);
@@ -51,7 +51,7 @@ TEST(ThreadSumModule, CalculateSumWithRandomVector)
         v.push_back(distrib(gen));
     }
 
-    int sum = std::accumulate(v.begin(), v.end(), 0);
+    long long sum = std::accumulate(v.begin(), v.end(), 0);
 
     EXPECT_EQ(parallelSumSingleThread(v), sum);
     EXPECT_EQ(parallelSumTwoThreads(v), sum);

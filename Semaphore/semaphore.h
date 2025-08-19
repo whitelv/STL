@@ -1,6 +1,7 @@
 #pragma once
 #include <mutex>
 #include <exception>
+#include <condition_variable>
 
 template <size_t MAX>
 class Semaphore
@@ -8,44 +9,35 @@ class Semaphore
 public:
     void release(size_t update = 1)
     {
-        if (update <= max_counter - current_counter)
+        if (update > max_counter - current_counter)
         {
-            mtx.lock();
-            current_counter += update;
-            mtx.unlock();
+            throw std::out_of_range("Error: cannot release more than max");
         }
+        std::lock_guard<std::mutex> lock(mtx);
+        current_counter += update;
+        cv.notify_all();
     }
 
     void acquire()
     {
-        while (true)
-        {
-            mtx.lock();
-            if (current_counter == 0)
-            {
-                mtx.unlock();
-                continue;
-            }
-            current_counter -= 1;
-            mtx.unlock();
-            break;
-        }
+        std::unique_lock<std::mutex> lock(mtx);
+        cv.wait(lock, [this]()
+                { return current_counter > 0; });
+        current_counter -= 1;
     }
 
     bool try_acquire()
     {
-        mtx.lock();
+        std::lock_guard lock(mtx);
         if (current_counter == 0)
         {
-            mtx.unlock();
             return false;
         }
         current_counter -= 1;
-        mtx.unlock();
         return true;
     }
 
-    size_t max() noexcept
+    size_t max() const noexcept
     {
         return max_counter;
     }
@@ -55,7 +47,7 @@ public:
     {
         if (desired > max_counter)
         {
-            throw std::out_of_range("Error: desired cannot be bigger than max");
+            throw std::out_of_range("Error: desired cannot be greater than max");
         }
     }
 
@@ -64,6 +56,7 @@ public:
 
 private:
     std::mutex mtx;
+    std::condition_variable cv;
     const size_t max_counter;
     size_t current_counter;
 };

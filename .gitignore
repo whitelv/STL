@@ -86,3 +86,7 @@ Median Problem/
 MPMC queue/build/
 
 MPMC queue/.vscode/
+
+batched logger/build/
+
+batched logger/.vscode/

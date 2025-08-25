@@ -14,7 +14,7 @@ public:
     using clock = std::chrono::high_resolution_clock;
     struct task_heap
     {
-        std::function<void()> func;
+        size_t id;
         std::chrono::time_point<clock> run_at;
         friend bool operator>(const task_heap &t1, const task_heap &t2)
         {
@@ -22,19 +22,28 @@ public:
         }
     };
 
-    void post(std::function<void()> func, std::chrono::time_point<clock> run_at)
+    struct task_map
     {
-        if (is_shutdown)
+        std::function<void()> func;
+        std::chrono::time_point<clock> run_at;
+    };
+
+    bool post(size_t id, std::function<void()> func, std::chrono::time_point<clock> run_at)
+    {
+        if (is_shutdown || tasks_map.contains(id))
         {
-            return;
+            return false;
         }
         
         std::lock_guard<std::mutex> lock(mtx);
         // std::cout << "post" << std::endl;
-        tasks_heap.push_back(task_heap{func, run_at});
+        tasks_heap.push_back(task_heap{id, run_at});
         std::push_heap(tasks_heap.begin(), tasks_heap.end(), std::greater());
+        tasks_map[id] = task_map{func, run_at};
         new_point = tasks_heap[0].run_at;
         cv_scheduler.notify_one();
+
+        return true;
     }
 
     void schedule()
@@ -72,7 +81,10 @@ public:
                     break;
                 }
             }
-            tasks_queue.push(tasks_heap[0]);
+            auto id = tasks_heap[0].id;
+
+            tasks_queue.push(tasks_map[id]);
+            tasks_map.erase(id);
             std::pop_heap(tasks_heap.begin(), tasks_heap.end(), std::greater());
             tasks_heap.pop_back();
             // std::cout << "tasks_heap.size() = " << tasks_heap.size() << std::endl;
@@ -100,6 +112,7 @@ public:
                     auto task = tasks_queue.front();
                     tasks_queue.pop();
                     std::cout << "actual time = " << clock::now() << " task time = " << task.run_at << std::endl;
+                    std::cout << "time diff = " << clock::now() - task.run_at << std::endl;
                     task.func();
                     iterations++;
                 }
@@ -111,6 +124,7 @@ public:
 
             // std::cout << "start doing task" << std::endl;
             std::cout << "actual time = " << clock::now() << " task time = " << task.run_at << std::endl;
+            std::cout << "time diff = " << clock::now() - task.run_at << std::endl;
             task.func();
             iterations++;
             // std::cout << "finish doing task" << std::endl;
@@ -118,6 +132,8 @@ public:
             // std::cout << "worker thread finished" << std::endl;
         }
     }
+
+    
 
     Scheduler() : is_shutdown(false), new_point(std::chrono::time_point<clock>::max()), current_point(std::chrono::time_point<clock>::max())
     {
@@ -142,7 +158,9 @@ public:
         }
         while (!tasks_heap.empty())
         {
-            tasks_queue.push(tasks_heap[0]);
+            auto id = tasks_heap[0].id;
+            tasks_queue.push(tasks_map[id]);
+            tasks_map.erase(id);
             std::pop_heap(tasks_heap.begin(), tasks_heap.end(), std::greater());
             tasks_heap.pop_back();
         }
@@ -199,7 +217,8 @@ public:
     std::condition_variable cv_worker;
 
     std::vector<task_heap> tasks_heap;
-    std::queue<task_heap> tasks_queue;
+    std::unordered_map<size_t, task_map> tasks_map;
+    std::queue<task_map> tasks_queue;
 
     bool is_shutdown;
 

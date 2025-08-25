@@ -34,7 +34,7 @@ public:
         {
             return false;
         }
-        
+
         std::lock_guard<std::mutex> lock(mtx);
         // std::cout << "post" << std::endl;
         tasks_heap.push_back(task_heap{id, run_at});
@@ -111,8 +111,8 @@ public:
                 {
                     auto task = tasks_queue.front();
                     tasks_queue.pop();
-                    std::cout << "actual time = " << clock::now() << " task time = " << task.run_at << std::endl;
-                    std::cout << "time diff = " << clock::now() - task.run_at << std::endl;
+                    // std::cout << "actual time = " << clock::now() << " task time = " << task.run_at << std::endl;
+                    // std::cout << "time diff = " << clock::now() - task.run_at << std::endl;
                     task.func();
                     iterations++;
                 }
@@ -124,7 +124,7 @@ public:
 
             // std::cout << "start doing task" << std::endl;
             std::cout << "actual time = " << clock::now() << " task time = " << task.run_at << std::endl;
-            std::cout << "time diff = " << clock::now() - task.run_at << std::endl;
+            // std::cout << "time diff = " << clock::now() - task.run_at << std::endl;
             task.func();
             iterations++;
             // std::cout << "finish doing task" << std::endl;
@@ -132,8 +132,6 @@ public:
             // std::cout << "worker thread finished" << std::endl;
         }
     }
-
-    
 
     Scheduler() : is_shutdown(false), new_point(std::chrono::time_point<clock>::max()), current_point(std::chrono::time_point<clock>::max())
     {
@@ -144,6 +142,22 @@ public:
 
         worker_thread = std::thread([this]
                                     { work(); });
+    }
+
+    bool cancel(size_t id)
+    {
+        std::lock_guard<std::mutex> lock(mtx);
+        if (is_shutdown || !tasks_map.contains(id))
+        {
+            return false;
+        }
+        tasks_map.erase(id);
+        tasks_heap.erase(std::find_if(tasks_heap.begin(), tasks_heap.end(), [&](const task_heap &t)
+                                      { return t.id == id; }));
+        std::make_heap(tasks_heap.begin(), tasks_heap.end(), std::greater());
+        current_point = new_point = tasks_heap.empty() ? std::chrono::time_point<clock>::max() : tasks_heap[0].run_at;
+        cv_scheduler.notify_one();
+        return true;
     }
 
     void shutdown(bool cancel = false)
@@ -198,7 +212,7 @@ public:
         {
             shutdown();
         }
-        
+
         if (scheduler_thread.joinable())
         {
             scheduler_thread.join();
@@ -208,7 +222,6 @@ public:
             worker_thread.join();
         }
         // std::cout << "iterations" << iterations << std::endl;
-
     }
 
 public:

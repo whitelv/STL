@@ -1,5 +1,5 @@
 #include "gtest/gtest.h"
-#include "scheduler1.h"
+#include "scheduler.h"
 
 using timepoint = std::chrono::time_point<Scheduler::clock>;
 using ms = std::chrono::milliseconds;

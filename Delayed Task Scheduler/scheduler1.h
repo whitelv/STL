@@ -24,6 +24,11 @@ public:
 
     void post(std::function<void()> func, std::chrono::time_point<clock> run_at)
     {
+        if (is_shutdown)
+        {
+            return;
+        }
+        
         std::lock_guard<std::mutex> lock(mtx);
         // std::cout << "post" << std::endl;
         tasks_heap.push_back(task_heap{func, run_at});
@@ -44,7 +49,7 @@ public:
                 bool ok = cv_scheduler.wait_until(lock, current_point, [this]()
                                                   { return is_shutdown || current_point != new_point; });
 
-                iterations++;
+                // iterations++;
 
                 if (is_shutdown)
                 {
@@ -90,6 +95,14 @@ public:
             if (is_shutdown)
             {
                 // std::cout << "worker thread shutdown" << std::endl;
+                while (!tasks_queue.empty())
+                {
+                    auto task = tasks_queue.front();
+                    tasks_queue.pop();
+                    std::cout << "actual time = " << clock::now() << " task time = " << task.run_at << std::endl;
+                    task.func();
+                    iterations++;
+                }
                 return;
             }
 
@@ -99,6 +112,7 @@ public:
             // std::cout << "start doing task" << std::endl;
             std::cout << "actual time = " << clock::now() << " task time = " << task.run_at << std::endl;
             task.func();
+            iterations++;
             // std::cout << "finish doing task" << std::endl;
 
             // std::cout << "worker thread finished" << std::endl;
@@ -116,34 +130,57 @@ public:
                                     { work(); });
     }
 
-
+    void shutdown(bool cancel = false)
+    {
+        std::lock_guard<std::mutex> lock(mtx);
+        if (cancel)
+        {
+            is_shutdown = true;
+            cv_scheduler.notify_one();
+            cv_worker.notify_one();
+            return;
+        }
+        while (!tasks_heap.empty())
+        {
+            tasks_queue.push(tasks_heap[0]);
+            std::pop_heap(tasks_heap.begin(), tasks_heap.end(), std::greater());
+            tasks_heap.pop_back();
+        }
+        is_shutdown = true;
+        cv_scheduler.notify_one();
+        cv_worker.notify_one();
+    }
 
     ~Scheduler()
     {
         // std::cout << "destructor" << std::endl;
         // std::cout << "iterations" << iterations << std::endl;
-        while (!tasks_queue.empty())
+
+        // {
+        //     std::lock_guard<std::mutex> lock(mtx);
+        //     while (!tasks_queue.empty())
+        //     {
+        //         std::cout << tasks_queue.front().run_at << std::endl;
+        //         tasks_queue.pop();
+        //     }
+
+        //     size_t i = 0;
+        //     while (!tasks_heap.empty())
+        //     {
+        //         std::cout << tasks_heap[0].run_at << std::endl;
+
+        //         std::pop_heap(tasks_heap.begin(), tasks_heap.end(), std::greater());
+        //         tasks_heap.pop_back();
+        //     }
+        //     is_shutdown = true;
+        //     cv_scheduler.notify_one();
+        //     cv_worker.notify_one();
+        // }
+        if (!is_shutdown)
         {
-            std::cout << tasks_queue.front().run_at << std::endl;
-            tasks_queue.pop();
+            shutdown();
         }
-
-        size_t i = 0;
-        while (!tasks_heap.empty())
-        {
-            std::cout << tasks_heap[0].run_at << std::endl;
-
-            std::pop_heap(tasks_heap.begin(), tasks_heap.end(), std::greater());
-            tasks_heap.pop_back();
-        }
-
-        {
-            std::lock_guard<std::mutex> lock(mtx);
-            is_shutdown = true;
-            cv_scheduler.notify_one();
-            cv_worker.notify_one();
-        }
-
+        
         if (scheduler_thread.joinable())
         {
             scheduler_thread.join();
@@ -152,6 +189,8 @@ public:
         {
             worker_thread.join();
         }
+        // std::cout << "iterations" << iterations << std::endl;
+
     }
 
 public:
